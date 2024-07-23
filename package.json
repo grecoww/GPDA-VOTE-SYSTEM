@@ -1,0 +1,32 @@
+{
+  "name": "gpda-voting-system",
+  "version": "1.0.0",
+  "description": "Implementação do sistema de votos utilizado na premiação Amaral Gurgel UFABC",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node ./src/app.js && NODE_ENV=development",
+    "routines": "npm run service:up && npm run migration:up",
+    "service:up": "docker compose -f infra/compose.yaml up -d",
+    "service:stop": "docker compose -f infra/compose.yaml stop",
+    "service:down": "docker compose -f infra/compose.yaml down",
+    "migration:create": "node-pg-migrate -m infra/migrations create",
+    "migration:up": "node-pg-migrate -m infra/migrations --envPath .env up",
+    "migration:down": "node-pg-migrate -m infra/migrations --envPath .env down"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grecoww/GPDA-VOTE-SYSTEM.git"
+  },
+  "author": "grecoww",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/grecoww/GPDA-VOTE-SYSTEM/issues"
+  },
+  "homepage": "https://github.com/grecoww/GPDA-VOTE-SYSTEM#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "pg": "^8.12.0"
+  }
+}
