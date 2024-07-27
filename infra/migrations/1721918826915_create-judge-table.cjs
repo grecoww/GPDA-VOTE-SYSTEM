@@ -4,7 +4,7 @@ exports.shorthands = undefined;
 
 exports.up = (pgm) => {
   pgm.sql(`
-    CREATE TABLE member (
+    CREATE TABLE judge (
       id VARCHAR(60) NOT NULL UNIQUE,
       name VARCHAR(100) NOT NULL,
       question_1_1 INTEGER,
@@ -40,6 +40,6 @@ exports.up = (pgm) => {
 
 exports.down = (pgm) => {
   pgm.sql(`
-    DROP TABLE member;
+    DROP TABLE judge;
   `);
 };
