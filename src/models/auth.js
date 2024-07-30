@@ -1,6 +1,7 @@
 import database from "../../infra/database.js";
+import utils from "./utils.js";
 
-export async function CheckJudgeName(req, res, next) {
+async function CheckJudgeName(req, res, next) {
   let judgeName;
   if (req.body.name) {
     judgeName = req.body.name;
@@ -23,6 +24,22 @@ export async function CheckJudgeName(req, res, next) {
   }
 }
 
+async function SetUpdatedAt(judgeName, teamId) {
+  const parsedJudgeName = judgeName.toLowerCase();
+  const time = utils.GetCurrentTime();
+
+  const text = "UPDATE judge SET updated_at = $3 WHERE name=$1 AND team_id=$2;";
+  const values = [parsedJudgeName, teamId, time];
+
+  const query = { text, values };
+
+  await database.query(query);
+}
+
+function GetTeamById() {}
+
 export default Object.freeze({
   CheckJudgeName,
+  SetUpdatedAt,
+  GetTeamById,
 });

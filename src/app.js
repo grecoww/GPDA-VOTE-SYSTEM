@@ -1,5 +1,5 @@
 import express from "express";
-import voteRoute from "./controllers/authenticate-judge.js";
+import voteRoute from "./controllers/judge.js";
 import "dotenv/config";
 
 const app = express();

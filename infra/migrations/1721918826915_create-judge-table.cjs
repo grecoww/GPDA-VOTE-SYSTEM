@@ -5,7 +5,7 @@ exports.shorthands = undefined;
 exports.up = (pgm) => {
   pgm.sql(`
     CREATE TABLE judge (
-      id VARCHAR(60) NOT NULL UNIQUE,
+      team_id VARCHAR(60) NOT NULL,
       name VARCHAR(100) NOT NULL,
       question_1_1 INTEGER,
       question_1_2 INTEGER,
