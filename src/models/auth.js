@@ -24,13 +24,23 @@ async function CheckJudgeName(req, res, next) {
   }
 }
 
-async function SetUpdatedAt(judgeName, teamId) {
+async function SetUpdatedAt_Judge(judgeName, teamId) {
   const parsedJudgeName = judgeName.toLowerCase();
   const time = utils.GetCurrentTime();
 
   const text = "UPDATE judge SET updated_at = $3 WHERE name=$1 AND team_id=$2;";
   const values = [parsedJudgeName, teamId, time];
+  const query = { text, values };
 
+  await database.query(query);
+}
+
+async function SetUpdatedAt_Vote_Control(judgeName) {
+  const parsedJudgeName = judgeName.toLowerCase();
+  const time = utils.GetCurrentTime();
+
+  const text = "UPDATE vote_control SET updated_at = $2 WHERE name=$1;";
+  const values = [parsedJudgeName, time];
   const query = { text, values };
 
   await database.query(query);
@@ -38,8 +48,14 @@ async function SetUpdatedAt(judgeName, teamId) {
 
 function GetTeamById() {}
 
+async function CheckAdminCredentials(req, res, next) {
+  next();
+}
+
 export default Object.freeze({
   CheckJudgeName,
-  SetUpdatedAt,
+  SetUpdatedAt_Judge,
+  SetUpdatedAt_Vote_Control,
   GetTeamById,
+  CheckAdminCredentials,
 });

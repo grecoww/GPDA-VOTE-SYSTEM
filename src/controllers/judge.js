@@ -15,13 +15,24 @@ voteRoute.post("/compute/:teamid", auth.CheckJudgeName, async (req, res) => {
   const judgeName = req.body.name;
   const teamId = req.params.teamid;
 
-  await auth.SetUpdatedAt(judgeName, teamId);
   const response = await vote.ComputeVote(votes, judgeName, teamId);
+  console.log("Vote computed:");
   console.log(response);
 
   const team = auth.GetTeamById(teamId);
-  console.log("Vote computed");
-  res.status(201).send(`Voto computado para ${team}: ${response}`);
+  res
+    .status(201)
+    .send(`Voto do jurado:${judgeName} para ${team} foi computado com sucesso`);
 });
+
+//prettier-ignore
+voteRoute.post("/uncompute/:teamid", auth.CheckAdminCredentials, async (req, res) => {
+  const judgeName = req.body.name
+  const teamId = req.params.teamid
+
+  await vote.UncomputeVote(judgeName, teamId)
+  console.log("Vote deleted")
+  res.status(201).send(`Voto do jurado:${judgeName} para o time ${teamId} foi removido com sucesso`)
+})
 
 export default voteRoute;
