@@ -46,9 +46,12 @@ async function SetUpdatedAt_Vote_Control(judgeName) {
   await database.query(query);
 }
 
-function GetTeamById() {}
+function GetTeamById(teamId) {}
 
 async function CheckAdminCredentials(req, res, next) {
+  const username = process.env.ADMIN_USER;
+  const password = process.env.ADMIN_PASSWORD;
+
   next();
 }
 
