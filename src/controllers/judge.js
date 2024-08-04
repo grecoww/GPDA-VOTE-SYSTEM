@@ -59,6 +59,4 @@ voteRoute.post("/uncompute/:teamid", auth.CheckAdminCredentials, async (req, res
   }
 })
 
-voteRoute.get("/result", auth.CheckAdminCredentials, async (req, res) => {});
-
 export default voteRoute;
