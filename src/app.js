@@ -1,6 +1,8 @@
 import express from "express";
 import voteRoute from "./controllers/judge.js";
 import adminRoute from "./controllers/admin-panel.js";
+import statusRoute from "./controllers/status.js";
+
 import "dotenv/config";
 
 const app = express();
@@ -10,6 +12,7 @@ app.use(express.json());
 
 app.use("/vote", voteRoute);
 app.use("/admin", adminRoute);
+app.use("/", statusRoute);
 
 app.all("*", (_, res) => {
   res.status(404).send("Rota não encontrada");
