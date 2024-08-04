@@ -4,7 +4,7 @@ exports.shorthands = undefined;
 
 exports.up = (pgm) => {
   pgm.sql(`
-    INSERT INTO teams (team_id, team_name) values ('1', 'GPDA');
+    INSERT INTO teams (team_id, team_name) values ('3', 'IEEE');
     `);
 };
 

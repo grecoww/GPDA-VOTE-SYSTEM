@@ -2,12 +2,11 @@ import database from "../../infra/database.js";
 import utils from "./utils.js";
 
 async function CheckJudgeName(req, res, next) {
-  let judgeName;
   if (req.body.name) {
-    judgeName = req.body.name;
+    const judgeName = req.body.name;
     const parsedJudgeName = judgeName.toLowerCase();
 
-    const text = "SELECT name FROM judge WHERE name=$1;";
+    const text = "SELECT name FROM vote_control WHERE name=$1;";
     const values = [parsedJudgeName];
     const query = { text, values };
     const response = await database.query(query);
@@ -19,7 +18,7 @@ async function CheckJudgeName(req, res, next) {
       next();
     }
   } else {
-    console.log("Not authenticated");
+    console.log("No judge name given");
     res.sendStatus(403);
   }
 }
@@ -46,7 +45,20 @@ async function SetUpdatedAt_Vote_Control(judgeName) {
   await database.query(query);
 }
 
-function GetTeamById(teamId) {}
+async function GetTeamById(teamId) {
+  const text = "SELECT team_name FROM teams WHERE team_id=$1;";
+  const values = [teamId];
+  const query = { text, values };
+  const response = await database.query(query);
+
+  if (response.rows[0] === undefined) {
+    console.log("O id do time nao existe");
+    throw new Error("O id do time não existe");
+  }
+
+  const parsedResponse = response.rows[0]["team_name"];
+  return parsedResponse;
+}
 
 async function CheckAdminCredentials(req, res, next) {
   const username = process.env.ADMIN_USER;
