@@ -13,4 +13,8 @@ statusRoute.get("/status", async (req, res) => {
   });
 });
 
+statusRoute.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
 export default statusRoute;
