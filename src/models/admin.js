@@ -1,5 +1,6 @@
 import database from "../../infra/database.js";
-import { exec } from "child_process";
+import { join } from "node:path";
+import migrationRunner from "node-pg-migrate";
 
 async function CreateTables(judgesArray, teamsArray) {
   for (let i = 0; i < judgesArray.length; i++) {
@@ -50,8 +51,19 @@ async function CleanDatabase() {
 }
 
 async function RunMigrations() {
-  exec("npm run migration:up");
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  const dbClient = await database.getNewCLient();
+
+  const migrationData = {
+    dbClient: dbClient,
+    dryRun: false,
+    dir: join("infra", "migrations"),
+    direction: "up",
+    verbose: true,
+    migrationsTable: "pgmigrations",
+  };
+
+  const migratedMigrations = await migrationRunner(migrationData);
+  await dbClient.end();
 }
 
 async function CreateVoteControlTable(teamsArray) {
