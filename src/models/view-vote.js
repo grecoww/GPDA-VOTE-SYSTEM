@@ -1,11 +1,15 @@
 import database from "../../infra/database.js";
 import auth from "./auth.js";
 
-async function VoteResult() {
+async function VoteResult(Force) {
+  //Force: Boolean
   try {
-    await CheckIfAllVoted();
+    if (!Force) {
+      await CheckIfAllVoted();
+    }
     const teamIds = await GetTeamIds(); //return array of teamIds
     let averageArrays = [];
+    let totalVotes = 0;
 
     const text = "SELECT * FROM judge WHERE team_id=$1";
     for (let id of teamIds) {
@@ -39,6 +43,19 @@ async function VoteResult() {
   }
 }
 
+async function JudgesVotes() {
+  const query = "SELECT * FROM vote_control";
+  const response = await database.query(query);
+  const parsedReponse = response.rows;
+
+  const voteControlArray = [];
+
+  for (let judge of parsedReponse) {
+    voteControlArray.push(judge);
+  }
+  return voteControlArray;
+}
+
 async function GetTeamIds() {
   const query = "SELECT team_id FROM teams;";
   const response = await database.query(query);
@@ -46,8 +63,22 @@ async function GetTeamIds() {
   return parsedResponse;
 }
 
-async function CheckIfAllVoted() {}
+async function CheckIfAllVoted() {
+  const query = "SELECT * FROM vote_control;";
+  const response = await database.query(query);
+  const parsedResponse = response.rows;
+  for (let object of parsedResponse) {
+    for (let key in object) {
+      if (key.includes("team")) {
+        if (object[key] === 0) {
+          throw new Error(`Aguarde todos os jurados terem votado...`);
+        }
+      }
+    }
+  }
+}
 
 export default Object.freeze({
   VoteResult,
+  JudgesVotes,
 });

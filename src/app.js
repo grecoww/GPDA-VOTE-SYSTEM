@@ -23,6 +23,8 @@ app.use((err, req, res, next) => {
     res.status(500).send(err.message);
   } else if (err.message === "O id do time não existe") {
     res.status(500).send(err.message);
+  } else if (err.message === "Aguarde todos os jurados terem votado...") {
+    res.status(500).send(err.message);
   } else {
     res.status(500).send("Algo deu errado!");
   }

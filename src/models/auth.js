@@ -61,8 +61,12 @@ async function GetTeamById(teamId) {
 }
 
 async function CheckAdminCredentials(req, res, next) {
-  const username = process.env.ADMIN_USER;
-  const password = process.env.ADMIN_PASSWORD;
+  next();
+}
+
+async function loginAdmin(username, password) {
+  const adminUsername = process.env.ADMIN_USER;
+  const adminPassword = process.env.ADMIN_PASSWORD;
 
   next();
 }

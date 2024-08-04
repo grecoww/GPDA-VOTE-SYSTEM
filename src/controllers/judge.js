@@ -38,25 +38,4 @@ voteRoute.post("/compute/:teamid", auth.CheckJudgeName, async (req, res, next) =
   }
 });
 
-//prettier-ignore
-voteRoute.post("/uncompute/:teamid", auth.CheckAdminCredentials, async (req, res, next) => {
-  try{
-    const judgeName = req.body.name
-    const teamId = req.params.teamid
-
-    if (!Number.isInteger(Number(teamId))) {
-    throw new Error("Id do time inválido");
-    }
-
-    const team = auth.GetTeamById(teamId);
-
-    await vote.UncomputeVote(judgeName, teamId)
-    console.log("Vote deleted")
-    res.status(201).send(`Voto do jurado:${judgeName} para o time ${team} foi removido com sucesso`)
-  }
-  catch(error) {
-    next(error)
-  }
-})
-
 export default voteRoute;

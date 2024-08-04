@@ -17,6 +17,8 @@ async function CreateTables(judgesArray, teamsArray) {
     }
   }
 
+  await CreateVoteControlTable(teamsArray);
+
   for (let i = 0; i < judgesArray.length; i++) {
     console.log(judgesArray[i]);
 
@@ -50,6 +52,25 @@ async function CleanDatabase() {
 async function RunMigrations() {
   exec("npm run migration:up");
   await new Promise((resolve) => setTimeout(resolve, 1000));
+}
+
+async function CreateVoteControlTable(teamsArray) {
+  let idsArray = [];
+
+  for (let i = 0; i < teamsArray.length; i++) {
+    idsArray.push(`team_${i + 1} INTEGER DEFAULT 0`);
+  }
+  const headers = idsArray.join(",\n      ");
+
+  let query = `
+    CREATE TABLE vote_control (
+      name VARCHAR(100) NOT NULL UNIQUE,
+      ${headers},
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `;
+  await database.query(query);
 }
 
 export default Object.freeze({
