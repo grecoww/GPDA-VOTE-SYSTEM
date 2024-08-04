@@ -3,12 +3,15 @@ import voteRoute from "./controllers/judge.js";
 import adminRoute from "./controllers/admin-panel.js";
 import statusRoute from "./controllers/status.js";
 
+import cors from "cors";
+
 import "dotenv/config";
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 
 app.use("/vote", voteRoute);
 app.use("/admin", adminRoute);
