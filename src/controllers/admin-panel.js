@@ -47,6 +47,15 @@ adminRoute.get("/judges", auth.CheckAdminCredentials, async (req, res, next) => 
   }
 });
 
+adminRoute.get("/teams", auth.CheckAdminCredentials, async (req, res, next) => {
+  try {
+    const response = await view.Teams(); //return where the judges have voted
+    res.status(200).json(response);
+  } catch (error) {
+    next(error);
+  }
+});
+
 //prettier-ignore
 adminRoute.post("/uncompute/:teamid", auth.CheckAdminCredentials, async (req, res, next) => {
   try{

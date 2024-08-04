@@ -78,7 +78,15 @@ async function CheckIfAllVoted() {
   }
 }
 
+async function Teams() {
+  const query = "SELECT * FROM teams;";
+  const response = await database.query(query);
+  const parsedResponse = response.rows;
+  return parsedResponse;
+}
+
 export default Object.freeze({
   VoteResult,
   JudgesVotes,
+  Teams,
 });

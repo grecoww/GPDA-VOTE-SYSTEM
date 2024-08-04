@@ -25,7 +25,7 @@ async function getNewCLient() {
     host: process.env.POSTGRES_HOST,
     port: process.env.POSTGRES_PORT,
     database: process.env.POSTGRES_DB,
-    ssl: true,
+    ssl: process.env.NODE_ENV === "production" ? true : false,
   });
 
   await client.connect();
