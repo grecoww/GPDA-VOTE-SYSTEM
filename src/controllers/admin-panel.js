@@ -26,7 +26,6 @@ adminRoute.post("/login", async (req, res, next) => {
 adminRoute.post("/feed", auth.CheckAdminCredentials, async (req, res, next) => {
   try {
     await admin.CleanDatabase();
-    await admin.RunMigrations();
 
     let { judges, teams } = req.body;
 
