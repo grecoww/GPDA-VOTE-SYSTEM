@@ -25,6 +25,7 @@ app.use(
     resave: false,
     cookie: {
       maxAge: 24 * 60 * 1000,
+      sameSite: "none",
     },
   })
 );
