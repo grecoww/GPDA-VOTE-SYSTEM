@@ -13,7 +13,10 @@ voteRoute.post("/verify", async (req, res, next) => {
 
     if (match) {
       req.session.name = name;
-      res.status(200).json(`Jurado ${name} autenticado com sucesso`);
+      res.status(200).json({
+        status: "jurado foi autenticado",
+        name: `${name}`,
+      });
     } else {
       res.status(403).json("Jurado não foi autenticado");
     }
