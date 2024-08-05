@@ -13,9 +13,9 @@ voteRoute.post("/verify", async (req, res, next) => {
 
     if (match) {
       req.session.name = name;
-      res.status(200).send(`Jurado ${name} autenticado com sucesso`);
+      res.status(200).json(`Jurado ${name} autenticado com sucesso`);
     } else {
-      res.status(403).send("Jurado não foi autenticado");
+      res.status(403).json("Jurado não foi autenticado");
     }
   } catch (error) {
     next(error);
@@ -40,7 +40,7 @@ voteRoute.post("/compute/:teamid", auth.CheckJudgeCredentials, async (req, res, 
     console.log("Vote computed:");
     console.log(response);
 
-    res.status(201).send(`Voto de ${judgeName} para ${team} foi computado com sucesso`);
+    res.status(201).json(`Voto de ${judgeName} para ${team} foi computado com sucesso`);
   } catch (error) {
     next(error)
   }

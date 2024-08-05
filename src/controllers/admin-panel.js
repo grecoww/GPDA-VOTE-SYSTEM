@@ -14,9 +14,9 @@ adminRoute.post("/login", async (req, res, next) => {
 
     if (match) {
       req.session.username = username;
-      res.status(200).send("Administrador autenticado com sucesso");
+      res.status(200).json("Administrador autenticado com sucesso");
     } else {
-      res.status(403).send("Administrador não foi autenticado");
+      res.status(403).json("Administrador não foi autenticado");
     }
   } catch (error) {
     next(error);
@@ -82,7 +82,7 @@ adminRoute.post("/uncompute/:teamid", auth.CheckAdminCredentials, async (req, re
 
     await vote.UncomputeVote(judgeName, teamId)
     console.log("Vote deleted")
-    res.status(201).send(`Voto de ${judgeName} para o time ${team} foi removido com sucesso`)
+    res.status(201).json(`Voto de ${judgeName} para o time ${team} foi removido com sucesso`)
   }
   catch(error) {
     next(error)

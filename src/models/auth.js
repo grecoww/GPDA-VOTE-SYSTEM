@@ -24,7 +24,7 @@ async function CheckJudgeCredentials(req, res, next) {
   if (req.session && req.session.name) {
     next();
   } else {
-    return res.status(403).send("Sessão não foi autorizada");
+    return res.status(403).json("Sessão não foi autorizada");
   }
 }
 
@@ -86,7 +86,7 @@ async function CheckAdminCredentials(req, res, next) {
   if (req.session && req.session.username) {
     next();
   } else {
-    return res.status(403).send("Sessão não foi autorizada");
+    return res.status(403).json("Sessão não foi autorizada");
   }
 }
 

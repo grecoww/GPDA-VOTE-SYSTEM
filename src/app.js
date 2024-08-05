@@ -34,21 +34,21 @@ app.use("/admin", adminRoute);
 app.use("/", statusRoute);
 
 app.all("*", (_, res) => {
-  res.status(404).send("Rota não encontrada");
+  res.status(404).json("Rota não encontrada");
 });
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
   if (err.message === "Id do time inválido") {
-    res.status(500).send(err.message);
+    res.status(500).json(err.message);
   } else if (err.message.includes("já votou no time")) {
-    res.status(500).send(err.message);
+    res.status(500).json(err.message);
   } else if (err.message === "O id do time não existe") {
-    res.status(500).send(err.message);
+    res.status(500).json(err.message);
   } else if (err.message === "Aguarde todos os jurados terem votado...") {
-    res.status(500).send(err.message);
+    res.status(500).json(err.message);
   } else {
-    res.status(500).send("Algo deu errado!");
+    res.status(500).json("Algo deu errado!");
   }
 });
 
