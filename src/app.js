@@ -5,6 +5,7 @@ import statusRoute from "./controllers/status.js";
 
 import cors from "cors";
 import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 
 import "dotenv/config";
 
@@ -14,8 +15,11 @@ const port = 3000;
 app.use(express.json());
 app.use(cors());
 
+const PgSession = connectPgSimple(session);
+
 app.use(
   session({
+    store: new PgSession(),
     secret: process.env.COOKIE_SECRET,
     saveUninitialized: false,
     resave: false,
