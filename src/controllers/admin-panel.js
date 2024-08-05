@@ -49,7 +49,7 @@ adminRoute.get("/vote/result", auth.CheckAdminCredentials, async (req, res, next
 })
 
 //prettier-ignore
-adminRoute.get("/judges", auth.CheckAdminCredentials, async (req, res, next) => {
+adminRoute.get("/judges", async (req, res, next) => {
   try {
     const response = await view.JudgesVotes(); //return where the judges have voted
     res.status(200).json(response);
@@ -58,7 +58,7 @@ adminRoute.get("/judges", auth.CheckAdminCredentials, async (req, res, next) => 
   }
 });
 
-adminRoute.get("/teams", auth.CheckAdminCredentials, async (req, res, next) => {
+adminRoute.get("/teams", async (req, res, next) => {
   try {
     const response = await view.Teams(); //return where the judges have voted
     res.status(200).json(response);
