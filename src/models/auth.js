@@ -1,25 +1,30 @@
 import database from "../../infra/database.js";
 import utils from "./utils.js";
 
-async function CheckJudgeName(req, res, next) {
-  if (req.body.name) {
-    const judgeName = req.body.name;
+async function AuthenticateJudge(judgeName) {
+  if (judgeName) {
     const parsedJudgeName = judgeName.toLowerCase();
-
     const text = "SELECT name FROM vote_control WHERE name=$1;";
     const values = [parsedJudgeName];
     const query = { text, values };
     const response = await database.query(query);
+    const parsedResponse = response.rows[0];
 
-    if (response.rows[0] === undefined) {
-      console.log("Not authenticated");
-      res.sendStatus(403);
+    if (parsedResponse === undefined) {
+      return false;
     } else {
-      next();
+      return true;
     }
   } else {
-    console.log("No judge name given");
-    res.sendStatus(403);
+    return false;
+  }
+}
+
+async function CheckJudgeCredentials(req, res, next) {
+  if (req.session && req.session.name) {
+    next();
+  } else {
+    return res.status(403).send("Sessão não foi autorizada");
   }
 }
 
@@ -60,21 +65,37 @@ async function GetTeamById(teamId) {
   return parsedResponse;
 }
 
-async function CheckAdminCredentials(req, res, next) {
-  next();
-}
-
-async function loginAdmin(username, password) {
+async function AuthenticateAdmin(username, password) {
   const adminUsername = process.env.ADMIN_USER;
   const adminPassword = process.env.ADMIN_PASSWORD;
 
-  next();
+  if (username && password) {
+    if (username === adminUsername) {
+      if (password === adminPassword) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+}
+
+async function CheckAdminCredentials(req, res, next) {
+  if (req.session && req.session.username) {
+    next();
+  } else {
+    return res.status(403).send("Sessão não foi autorizada");
+  }
 }
 
 export default Object.freeze({
-  CheckJudgeName,
+  AuthenticateJudge,
+  CheckJudgeCredentials,
   SetUpdatedAt_Judge,
   SetUpdatedAt_Vote_Control,
   GetTeamById,
+  AuthenticateAdmin,
   CheckAdminCredentials,
 });

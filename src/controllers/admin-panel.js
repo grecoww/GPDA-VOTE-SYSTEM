@@ -6,9 +6,21 @@ import vote from "../models/compute-vote.js";
 
 const adminRoute = express.Router();
 
-adminRoute.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-  await loginAdmin();
+adminRoute.post("/login", async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+
+    const match = await auth.AuthenticateAdmin(username, password);
+
+    if (match) {
+      req.session.username = username;
+      res.status(200).send("Administrador autenticado com sucesso");
+    } else {
+      res.status(403).send("Administrador não foi autenticado");
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 adminRoute.post("/feed", auth.CheckAdminCredentials, async (req, res, next) => {

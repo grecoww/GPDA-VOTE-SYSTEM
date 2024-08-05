@@ -5,17 +5,29 @@ import vote from "../models/compute-vote.js";
 const voteRoute = express.Router();
 
 //o nome do jurado armazenado no banco de dados sera o primeiro e ultimo nome separados por espaco
-voteRoute.post("/verify", auth.CheckJudgeName, async (req, res) => {
-  console.log("Judge Authenticated");
-  res.sendStatus(200);
+voteRoute.post("/verify", async (req, res, next) => {
+  try {
+    const { name } = req.body;
+
+    const match = await auth.AuthenticateJudge(name);
+
+    if (match) {
+      req.session.name = name;
+      res.status(200).send(`Jurado ${name} autenticado com sucesso`);
+    } else {
+      res.status(403).send("Jurado não foi autenticado");
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 //prettier-ignore
-voteRoute.post("/compute/:teamid", auth.CheckJudgeName, async (req, res, next) => {
+voteRoute.post("/compute/:teamid", auth.CheckJudgeCredentials, async (req, res, next) => {
   try {
     const votes = req.body;
-    const judgeName = req.body.name;
     const teamId = req.params.teamid;
+    const judgeName = req.session.name
 
     if (!Number.isInteger(Number(teamId))) {
       throw new Error("Id do time inválido");
@@ -28,11 +40,7 @@ voteRoute.post("/compute/:teamid", auth.CheckJudgeName, async (req, res, next) =
     console.log("Vote computed:");
     console.log(response);
 
-    res
-      .status(201)
-      .send(
-        `Voto de ${judgeName} para ${team} foi computado com sucesso`
-      );
+    res.status(201).send(`Voto de ${judgeName} para ${team} foi computado com sucesso`);
   } catch (error) {
     next(error)
   }
