@@ -9,7 +9,6 @@ async function VoteResult(Force) {
     }
     const teamIds = await GetTeamIds(); //return array of teamIds
     let averageArrays = [];
-    let totalVotes = 0;
 
     const text = "SELECT * FROM judge WHERE team_id=$1";
     for (let id of teamIds) {
@@ -24,11 +23,24 @@ async function VoteResult(Force) {
       let somatorio = 0;
       let length = 0;
 
+      const pesos = {
+        question_1_1: 3,
+        question_1_2: 2,
+        question_1_3: 3,
+        question_2_1: 2,
+        question_2_2: 3,
+        question_2_3: 2,
+        question_3_1: 3,
+        question_3_2: 2,
+        question_3_3: 1,
+      };
+
       for (let i = 0; i < parsedResponse.length; i++) {
         for (let key in parsedResponse[i]) {
-          if (key.includes("question")) {
-            somatorio += Number(parsedResponse[i][key]);
-            length += 1;
+          if (pesos.hasOwnProperty(key)) {
+            const peso = pesos[key];
+            somatorio += Number(parsedResponse[i][key]) * peso;
+            length += peso;
           }
         }
       }
