@@ -12,8 +12,6 @@ import connectPgSimple from "connect-pg-simple";
 
 import "dotenv/config";
 
-app.set("trust proxy", 1);
-
 const app = express();
 const port = 3000;
 
@@ -42,10 +40,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  if (
-    process.env.NODE_ENV === "production" &&
-    req.headers["x-forwarded-proto"] !== "https"
-  ) {
+  if (process.env.NODE_ENV === "production") {
     return res.redirect(`https://${req.headers.host}${req.url}`);
   }
   next();
