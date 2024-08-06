@@ -3,6 +3,9 @@ import voteRoute from "./controllers/judge.js";
 import adminRoute from "./controllers/admin-panel.js";
 import statusRoute from "./controllers/status.js";
 
+import fs from "fs";
+import https from "https";
+
 import cors from "cors";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
@@ -31,6 +34,7 @@ app.use(
     cookie: {
       maxAge: 24 * 60 * 1000,
       sameSite: "none",
+      secure: true,
     },
   })
 );
@@ -61,5 +65,17 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+https
+  .createServer(
+    {
+      cert: fs.readFileSync("./SSL/code.crt"),
+      key: fs.readFileSync("./SSL/code.key"),
+    },
+    app
+  )
+  .listen(443, () => {
+    console.log(`HTTPS server is running!`);
+  });
 
 export default app;
