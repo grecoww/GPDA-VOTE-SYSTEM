@@ -7,7 +7,7 @@ async function ComputeVote(votes, judgeName, teamId) {
 
     const parsedJudgeName = judgeName.toLowerCase();
     const text =
-      "UPDATE judge SET question_1_1=$1, question_1_2=$2, question_1_3=$3, question_2_1=$4, question_2_2=$5, question_2_3=$6, question_3_1=$7, question_3_2=$8, question_3_3=$9 name=$10 AND team_id=$11 RETURNING *;";
+      "UPDATE judge SET question_1_1=$1, question_1_2=$2, question_1_3=$3, question_2_1=$4, question_2_2=$5, question_2_3=$6, question_3_1=$7, question_3_2=$8, question_3_3=$9 WHERE name=$10 AND team_id=$11 RETURNING *;";
     //prettier-ignore
     const values = [
             votes.q1_1, votes.q1_2, votes.q1_3,
