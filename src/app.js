@@ -13,6 +13,7 @@ import connectPgSimple from "connect-pg-simple";
 import "dotenv/config";
 
 const app = express();
+app.set("trust proxy", 1);
 const port = 3000;
 
 app.use(express.json());
@@ -34,7 +35,7 @@ app.use(
     cookie: {
       maxAge: 24 * 60 * 1000,
       sameSite: "none",
-      secure: true,
+      secure: "auto",
     },
   })
 );
