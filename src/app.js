@@ -35,7 +35,7 @@ app.use(
     cookie: {
       maxAge: 24 * 60 * 1000,
       sameSite: "none",
-      secure: "auto",
+      secure: true,
     },
   })
 );
@@ -77,6 +77,7 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
+const httpsport = process.env.NODE_ENV === "production" ? 443 : 3001;
 https
   .createServer(
     {
@@ -85,7 +86,7 @@ https
     },
     app
   )
-  .listen(443, () => {
+  .listen(httpsport, () => {
     console.log(`HTTPS server is running`);
   });
 
