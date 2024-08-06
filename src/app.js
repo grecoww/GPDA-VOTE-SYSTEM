@@ -75,7 +75,7 @@ https
     app
   )
   .listen(443, () => {
-    console.log(`HTTPS server is running!`);
+    console.log(`HTTPS server is running`);
   });
 
 export default app;
