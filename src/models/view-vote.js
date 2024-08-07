@@ -48,6 +48,12 @@ async function VoteResult(Force) {
       const parsedAverage = { [team]: average };
       console.log(`Média de pontos do(a) ${team} -> ${average}`);
       averageArrays.push(parsedAverage);
+
+      averageArrays.sort((a, b) => {
+        const valueA = Object.values(a)[0];
+        const valueB = Object.values(b)[0];
+        return valueB - valueA;
+      });
     }
     return averageArrays;
   } catch (error) {
