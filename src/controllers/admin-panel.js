@@ -39,7 +39,7 @@ adminRoute.post("/feed", auth.CheckAdminCredentials, async (req, res, next) => {
 });
 
 //prettier-ignore
-adminRoute.get("/vote/result", auth.CheckAdminCredentials, async (req, res, next) => {
+adminRoute.get("/vote/result", async (req, res, next) => {
   try {
     const force = req.query.force === "true"
     const response = await view.VoteResult(force) //return the average points of each team (only works if all judges have voted, unless it have force=true)
